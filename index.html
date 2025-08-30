@@ -5,6 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Constituição Nemosínica</title>
   <style>
+    <script>
+  (function () {
+    const content = document.querySelector('#conteudo');
+    const toc = document.querySelector('#toc-list');
+    if (!content || !toc) return;
+
+    // cria âncora no topo
+    const topA = document.createElement('a');
+    topA.id = 'topo';
+    document.body.prepend(topA);
+
+    // coleta H2/H3, gera ids e monta o índice
+    const headings = Array.from(content.querySelectorAll('h2, h3'));
+    headings.forEach(h => {
+      if (!h.id) {
+        h.id = h.textContent.trim()
+          .toLowerCase()
+          .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // remove acentos
+          .replace(/[^a-z0-9\s-]/g, '')                    // remove símbolos
+          .replace(/\s+/g, '-');                           // espaços -> hífen
+      }
+      const li = document.createElement('li');
+      if (h.tagName === 'H3') li.style.marginLeft = '12px';
+      const a = document.createElement('a');
+      a.href = '#' + h.id;
+      a.textContent = h.textContent;
+      li.appendChild(a);
+      toc.appendChild(li);
+    });
+  })();
+</script>
+
     body {
       font-family: "Segoe UI", Roboto, Arial, sans-serif;
       line-height: 1.6;
@@ -14,6 +46,14 @@
       background: #fafafa;
       color: #222;
     }
+    <div class="layout">
+  <nav class="toc">
+    <h3>Índice</h3>
+    <ol id="toc-list"></ol>
+    <div class="history">🔎 <a href="https://github.com/edersouzamelo/nemosine-constituicao/commits/main" target="_blank" rel="noopener">Ver histórico de emendas</a></div>
+  </nav>
+  <main id="conteudo">
+
     h1, h2 {
       color: #111;
       border-bottom: 2px solid #ddd;
@@ -43,6 +83,16 @@
       text-align: center;
       color: #666;
     }
+    html{ scroll-behavior:smooth; }
+.layout{display:grid;grid-template-columns:260px 1fr;gap:28px;max-width:1100px;margin:32px auto;padding:0 16px}
+nav.toc{position:sticky; top:16px; align-self:start; background:#fafafa; border:1px solid #e7e7e7; border-radius:10px; padding:14px}
+nav.toc h3{margin:0 0 8px 0; font-size:1rem}
+nav.toc ol{margin:0; padding-left:18px; line-height:1.5}
+nav.toc a{color:#0b66d6; text-decoration:none}
+nav.toc a:hover{text-decoration:underline}
+.history{margin-top:12px; font-size:.92rem}
+.backtop{margin-top:12px; font-size:.92rem}
+
   </style>
 </head>
 <body>
@@ -141,9 +191,12 @@ Sob este pacto, o Nemosine Nous se reconhece vivo, modular e uno.</p>
 
 <h2> Nota do Criador: Enquanto o Anexo da Estrutura de Jogabilidade tem caráter opcional, este Anexo da Constituição Nemosínica tem caráter obrigatório.</h2>
  </main>
+  </main>
+</div>
 
   <footer>
     Documento oficial hospedado em <a href="https://github.com/edersouzamelo/nemosine-constituicao" target="_blank">GitHub</a>.
+
   </footer>
 </body>
 </html>
